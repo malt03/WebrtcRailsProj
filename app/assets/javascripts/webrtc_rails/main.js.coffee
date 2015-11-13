@@ -3,36 +3,11 @@ class @WebRTC
   onHangedUp: ->
   onReconnectingStarted: ->
 
-  constructor: (userID, @localOutput, @remoteOutput) ->
+  constructor: (userIdentifier, @localOutput, @remoteOutput) ->
     @localOutput = @localOutput[0] || @localOutput
     @remoteOutput = @remoteOutput[0] || @remoteOutput
     @_startOutput(@localOutput.tagName.toUpperCase() == 'VIDEO')
-    @wsRails = new WebSocketRails(location.host + "/websocket?webrtc=true&user_identifier=" + userID)
-    @wsRails.bind("webrtc"
-      (data) =>
-        event = JSON.parse(data)
-        switch event['type']
-          when 'call'
-            @remoteUserID = event['remoteUserID']
-          when 'hangUp'
-            @onHangedUp()
-            @_hangedUp = true
-            @_sendMessage(JSON.stringify(type: 'hangUpAnswer'))
-            @_stop()
-          when 'hangUpAnswer'
-            @_stop()
-          when 'offer'
-            @_onOffer(event)
-          when 'answer'
-            if @_peerStarted
-              @_onAnswer(event)
-          when 'candidate'
-            if @_peerStarted
-              @_onCandidate(event)
-          when 'user disconnected'
-            if @_peerStarted
-              @_stop()
-    )
+    @_webSocketInitialize(userIdentifier)
 
   connect: (myUserID, remoteUserID) ->
     @remoteUserID = remoteUserID
@@ -70,6 +45,38 @@ class @WebRTC
   _mediaConstraints: 'mandatory':
     'OfferToReceiveAudio': true
     'OfferToReceiveVideo': true
+
+  _webSocketInitialize: (userIdentifier) ->
+    @_wsRails = new WebSocketRails(location.host + "/websocket?webrtc=true&user_identifier=" + userIdentifier)
+    @_wsRails.bind("webrtc"
+      (data) =>
+        event = JSON.parse(data)
+        switch event['type']
+          when 'call'
+            @remoteUserID = event['remoteUserID']
+          when 'hangUp'
+            @onHangedUp()
+            @_hangedUp = true
+            @_sendMessage(JSON.stringify(type: 'hangUpAnswer'))
+            @_stop()
+          when 'hangUpAnswer'
+            @_stop()
+          when 'offer'
+            @_onOffer(event)
+          when 'answer'
+            if @_peerStarted
+              @_onAnswer(event)
+          when 'candidate'
+            if @_peerStarted
+              @_onCandidate(event)
+          when 'user disconnected'
+            if @_peerStarted
+              @_stop()
+    )
+    @_wsRails.bind("connection_closed", =>
+      console.log('connection_closed')
+      @_webSocketInitialize()
+    )
 
   _sendMessage: (message) ->
     $.ajax(
@@ -144,6 +151,7 @@ class @WebRTC
     peer.oniceconnectionstatechange = (event) =>
       switch peer.iceConnectionState
         when 'disconnected'
+          console.log(@_wsRails.stale)
           @onReconnectingStarted()
         when 'connected', 'completed'
           if @_hangedUp
