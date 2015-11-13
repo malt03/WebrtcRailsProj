@@ -1,5 +1,11 @@
 class @WebRTC
+  onConnected: ->
+  onHangedUp: ->
+  onReconnectingStarted: ->
+
   constructor: (userID, @localOutput, @remoteOutput) ->
+    @localOutput = @localOutput[0] || @localOutput
+    @remoteOutput = @remoteOutput[0] || @remoteOutput
     @_startOutput(@localOutput.tagName.toUpperCase() == 'VIDEO')
     @wsRails = new WebSocketRails(location.host + "/websocket?webrtc=true&user_identifier=" + userID)
     @wsRails.bind("webrtc"
@@ -8,6 +14,13 @@ class @WebRTC
         switch event['type']
           when 'call'
             @remoteUserID = event['remoteUserID']
+          when 'hangUp'
+            @onHangedUp()
+            @_hangedUp = true
+            @_sendMessage(JSON.stringify(type: 'hangUpAnswer'))
+            @_stop()
+          when 'hangUpAnswer'
+            @_stop()
           when 'offer'
             @_onOffer(event)
           when 'answer'
@@ -44,10 +57,13 @@ class @WebRTC
       track.enabled = enabled
 
   hangUp: ->
-    @_stop()
+    @onHangedUp()
+    @_sendMessage(JSON.stringify(type: 'hangUp'))
+    @_hangedUp = true
 
   # private
 
+  _hangedUp: true
   _localStream: null
   _peerConnection: null
   _peerStarted: false
@@ -58,7 +74,7 @@ class @WebRTC
   _sendMessage: (message) ->
     $.ajax(
       type: 'POST'
-      url: 'webrtc'
+      url: '/webrtc'
       data:
         user_id: @remoteUserID
         message: message
@@ -125,6 +141,15 @@ class @WebRTC
           candidate: event.candidate.candidate
         )
 
+    peer.oniceconnectionstatechange = (event) =>
+      switch peer.iceConnectionState
+        when 'disconnected'
+          @onReconnectingStarted()
+        when 'connected', 'completed'
+          if @_hangedUp
+            @onConnected()
+          @_hangedUp = false
+
     peer.addStream(@_localStream)
     peer.addEventListener('addstream', onRemoteStreamAdded, false)
     peer.addEventListener('removestream', onRemoteStreamRemoved, false)
@@ -153,7 +178,7 @@ class @WebRTC
       return
     @_peerConnection.createAnswer(
       (sessionDescription) =>
-        @_peerConnection.setLocalDescription sessionDescription
+        @_peerConnection.setLocalDescription(sessionDescription)
         @_sendSDP(sessionDescription)
       ->
         console.log('Create Answer failed')
@@ -167,6 +192,7 @@ class @WebRTC
     @_peerConnection.setRemoteDescription(new RTCSessionDescription(event))
 
   _stop: ->
+    @_peerConnection.removeStream(@_peerConnection.getRemoteStreams()[0])
     @_peerConnection.close()
     @_peerConnection = null
     @_peerStarted = false

@@ -24,7 +24,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'websocket-rails', github: 'malt03/websocket-rails'
-gem 'webrtc-rails'
+gem 'webrtc-rails', github: 'malt03/webrtc-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
