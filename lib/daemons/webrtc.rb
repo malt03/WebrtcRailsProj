@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'em-websocket'
-
 ENV["RAILS_ENV"] ||= "production"
 
 root = File.expand_path(File.dirname(__FILE__))
