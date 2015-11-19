@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
-//= require websocket_rails/main
 
+
+// append by webrtc_rails
 //= require webrtc_rails/main
+
