@@ -6,12 +6,12 @@ webrtc = null
   webrtc = new WebRTC('ws://' + location.host + '/websocket', id, localVideo, remoteVideo)
   webrtc.onWebSocketConnected = -> console.log("onWebSocketConnected")
   webrtc.onWebSocketReconnectingStarted = -> console.log("onWebSocketReconnectingStarted")
-  webrtc.onWebSocketReConnected = -> console.log("onWebSocketReConnected")
+  webrtc.onWebSocketReconnected = -> console.log("onWebSocketReconnected")
   webrtc.onWebRTCConnected = -> console.log("onWebRTCConnected")
   webrtc.onWebRTCReconnectingStarted = -> console.log("onWebRTCReconnectingStarted")
   webrtc.onWebRTCReconnected = -> console.log("onWebRTCReconnected")
   webrtc.onWebRTCHangedUp = -> console.log("onWebRTCHangedUp")
-  webrtc.onWebRTCConnectFailed = -> console.log("onWebRTCConnectFailed")
+  webrtc.onWebRTCConnectFailed = (reason)-> console.log("onWebRTCConnectFailed: " + reason)
 
 @connect = ->
   webrtc.connect($('#id').val())
