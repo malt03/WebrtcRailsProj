@@ -46,7 +46,7 @@ group :development do
   gem 'spring'
 end
 
-gem 'webrtc-rails', github: 'malt03/webrtc-rails'
+gem 'webrtc-rails'
 
 gem 'daemons-rails'
 gem 'em-websocket'
