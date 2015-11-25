@@ -19,7 +19,7 @@ webrtc = null
 @hangUp = ->
   webrtc.hangUp()
 
-flag = true
+flag = false
 @toggle = ->
   webrtc.setVideoEnabled(flag)
   flag = !flag
