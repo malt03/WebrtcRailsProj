@@ -11,7 +11,9 @@ webrtc = null
   webrtc.onWebRTCReconnectingStarted = -> console.log("onWebRTCReconnectingStarted")
   webrtc.onWebRTCReconnected = -> console.log("onWebRTCReconnected")
   webrtc.onWebRTCHangedUp = -> console.log("onWebRTCHangedUp")
-  webrtc.onWebRTCConnectFailed = (reason)-> console.log("onWebRTCConnectFailed: " + reason)
+  webrtc.onWebRTCConnectFailed = (reason) -> console.log("onWebRTCConnectFailed: " + reason)
+  webrtc.onServerMessage = (message) -> console.log("serverMessage: " + message)
+  webrtc.onUserMessage = (type, message) -> console.log("serverMessage: " + type + ", " + message)
 
 @connect = ->
   webrtc.connect($('#id').val())
@@ -23,3 +25,9 @@ flag = false
 @toggle = ->
   webrtc.setVideoEnabled(flag)
   flag = !flag
+
+@hoge = ->
+  $.post("/hoge")
+
+@sendUserMessage = ->
+  webrtc.sendUserMessage('hoge', 'piyopiyo')
