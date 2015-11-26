@@ -5,14 +5,6 @@ GIT
     mofmof (0.1.0)
       eventmachine
 
-GIT
-  remote: git://github.com/malt03/webrtc-rails.git
-  revision: d49c9b58c1b4a0a13319788684617a35108ab724
-  specs:
-    webrtc-rails (0.3.0)
-      em-hiredis
-      em-websocket
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -159,6 +151,9 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    webrtc-rails (0.3.1)
+      em-hiredis
+      em-websocket
 
 PLATFORMS
   ruby
@@ -178,7 +173,7 @@ DEPENDENCIES
   turbolinks
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
-  webrtc-rails!
+  webrtc-rails
 
 BUNDLED WITH
    1.10.6

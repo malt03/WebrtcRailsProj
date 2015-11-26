@@ -50,4 +50,4 @@ gem 'redis'
 
 gem 'mofmof', github: 'malt03/mofmof'
 
-gem 'webrtc-rails', github: 'malt03/webrtc-rails'
+gem 'webrtc-rails'
