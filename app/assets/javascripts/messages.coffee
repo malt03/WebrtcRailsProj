@@ -13,7 +13,8 @@ webrtc = null
   webrtc.onWebRTCHangedUp = -> console.log("onWebRTCHangedUp")
   webrtc.onWebRTCConnectFailed = (reason) -> console.log("onWebRTCConnectFailed: " + reason)
   webrtc.onServerMessage = (message) -> console.log("serverMessage: " + message)
-  webrtc.onUserMessage = (type, message) -> console.log("serverMessage: " + type + ", " + message)
+  webrtc.onUserMessage = (userID, type, message) -> console.log("serverMessage: " + userID + ", " + type + ", " + message)
+  webrtc.onWebRTCCall = (userID) -> webrtc.answer()
 
 @connect = ->
   webrtc.connect($('#id').val())
@@ -30,4 +31,4 @@ flag = false
   $.post("/hoge")
 
 @sendUserMessage = ->
-  webrtc.sendUserMessage('hoge', 'piyopiyo')
+  webrtc.sendUserMessage($('#id').val(), 'hoge', 'piyopiyo')

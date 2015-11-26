@@ -19,3 +19,7 @@
 // append by webrtc_rails
 //= require webrtc_rails/main
 
+
+// append by webrtc_rails
+//= require webrtc_rails/main
+

@@ -1,11 +1,17 @@
 GIT
-  remote: git://github.com/malt03/webrtc-rails.git
-  revision: 0d1b92bc6d44dbe770d299acca46c8d5c7ab6c72
+  remote: git://github.com/malt03/mofmof.git
+  revision: 0b49ba6430b9f8836d6872b9a404cd1e06febe42
   specs:
-    webrtc-rails (0.2.0)
-      daemons-rails
+    mofmof (0.1.0)
+      eventmachine
+
+GIT
+  remote: git://github.com/malt03/webrtc-rails.git
+  revision: d49c9b58c1b4a0a13319788684617a35108ab724
+  specs:
+    webrtc-rails (0.3.0)
+      em-hiredis
       em-websocket
-      redis
 
 GEM
   remote: https://rubygems.org/
@@ -49,7 +55,7 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
-    byebug (8.2.0)
+    byebug (8.2.1)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -57,10 +63,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
-    daemons (1.2.3)
-    daemons-rails (1.2.1)
-      daemons
-      multi_json (~> 1.0)
     debug_inspector (0.0.2)
     em-hiredis (0.3.0)
       eventmachine (~> 1.0)
@@ -164,12 +166,11 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
-  daemons-rails
-  em-hiredis
-  em-websocket
   jbuilder (~> 2.0)
   jquery-rails
+  mofmof!
   rails (= 4.2.4)
+  redis
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
