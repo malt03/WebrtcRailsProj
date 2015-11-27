@@ -3,7 +3,8 @@ webrtc = null
 @initialize = (id) ->
   localVideo = document.getElementById('local-video')
   remoteVideo = document.getElementById('remote-video')
-  webrtc = new WebRTC('ws://' + location.host + '/websocket', id, localVideo, remoteVideo)
+  # webrtc = new WebRTC('ws://' + location.host + '/websocket', id, localVideo, remoteVideo)
+  webrtc = new WebRTC('ws://localhost:3001', id, localVideo, remoteVideo)
   webrtc.onWebSocketConnected = -> console.log("onWebSocketConnected")
   webrtc.onWebSocketReconnectingStarted = -> console.log("onWebSocketReconnectingStarted")
   webrtc.onWebSocketReconnected = -> console.log("onWebSocketReconnected")
@@ -17,7 +18,7 @@ webrtc = null
   webrtc.onWebRTCCall = (userID) -> webrtc.answer()
 
 @connect = ->
-  webrtc.connect($('#id').val())
+  webrtc.call($('#id').val())
 
 @hangUp = ->
   webrtc.hangUp()
